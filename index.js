@@ -21,6 +21,7 @@ const girilenVeri = (data) => {
                     cumle.splice(index,cumle.length-this.value.length);
                 }
             });
+            
             veriEslestir(data, cumle);
         }
     });
@@ -33,10 +34,13 @@ const girilenVeri = (data) => {
         });
         veriEslestir(data, cumle);
     });
-    // document.getElementById('arama').addEventListener('change',function(e){
-        
+    document.getElementById('arama').addEventListener('paste',function(e){
+        setTimeout(() => {
+            Array.from(this.value).forEach(element=>cumle.push(element));
+            veriEslestir(data, cumle);
+        }, 1);
       
-    // });
+    });
     document.getElementById('arama').addEventListener('keypress',function(e){
         cumle.push(String.fromCharCode(e.keyCode));
         veriEslestir(data, cumle);
