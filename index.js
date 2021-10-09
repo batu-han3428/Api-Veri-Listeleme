@@ -15,13 +15,9 @@ const todosApi = (element) =>{
 const girilenVeri = (data) => {
     let cumle = [];
     document.getElementById('arama').addEventListener('keyup',function(e){
-        if(e.keyCode == 8){
-            cumle.forEach((element,index)=>{
-                if(!this.value.includes(element)){
-                    cumle.splice(index,cumle.length-this.value.length);
-                }
-            });
-            
+        if(e.keyCode == 8){         
+            cumle.splice(0,cumle.length);
+            Array.from(this.value).forEach(element=>cumle.push(element));
             veriEslestir(data, cumle);
         }
     });
@@ -36,14 +32,29 @@ const girilenVeri = (data) => {
     });
     document.getElementById('arama').addEventListener('paste',function(e){
         setTimeout(() => {
+            cumle.splice(0,cumle.length);
             Array.from(this.value).forEach(element=>cumle.push(element));
             veriEslestir(data, cumle);
         }, 1);
-      
     });
     document.getElementById('arama').addEventListener('keypress',function(e){
-        cumle.push(String.fromCharCode(e.keyCode));
-        veriEslestir(data, cumle);
+        const selection = document.getSelection().toString();
+        if(selection != ""){
+            let c = cumle.toString().replace(/,/g,"");
+            if(c.indexOf(selection) || c === selection){                       
+                cumle.splice(c.indexOf(selection),selection.length,String.fromCharCode(e.keyCode));
+                veriEslestir(data, cumle);
+            }else if(c.indexOf(selection) > -1){
+                cumle.splice(c.indexOf(selection),selection.length,String.fromCharCode(e.keyCode));
+                veriEslestir(data, cumle);
+            }
+        }else{
+            setTimeout(() => {
+                cumle.splice(0,cumle.length);
+                Array.from(this.value).forEach(element=>cumle.push(element));
+                veriEslestir(data, cumle);
+            }, 1);
+        }
     });
 }
 
